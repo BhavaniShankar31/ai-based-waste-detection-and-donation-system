@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>EcoSense AI</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+
+<header>
+  <h1>🌿 EcoSense AI</h1>
+  <p>Smart waste classification for a cleaner, sustainable future</p>
+</header>
+
+<div class="container">
+  <h2>Analyze Your Waste</h2>
+  <p>Upload a photo or use your camera to identify waste type</p>
+
+  <div id="preview-box">
+    <video id="camera" autoplay playsinline style="display:none;"></video>
+    <img id="preview-image" style="display:none;">
+  </div>
+
+  <form id="wasteForm" action="/predict" method="post" enctype="multipart/form-data">
+    
+    <input type="file" name="image" id="fileInput" accept="image/*" hidden>
+
+    <!--  Required Hidden Location Fields -->
+    <input type="hidden" name="lat" id="lat">
+    <input type="hidden" name="lon" id="lon">
+
+    <div class="button-row">
+      <button type="button" id="cameraBtn" class="primary-btn">📷 Use Camera</button>
+      <button type="button" id="uploadBtn" class="secondary-btn">⬆ Upload Photo</button>
+    </div>
+
+    <button type="button" id="captureBtn" class="primary-btn" style="display:none;">📸 Capture Photo</button>
+
+    <button type="submit" id="submitBtn" class="analyze-btn" disabled>Analyze Waste</button>
+  </form>
+
+</div>
+
+<script>
+const cameraBtn = document.getElementById("cameraBtn");
+const uploadBtn = document.getElementById("uploadBtn");
+const captureBtn = document.getElementById("captureBtn");
+const fileInput = document.getElementById("fileInput");
+const video = document.getElementById("camera");
+const previewImage = document.getElementById("preview-image");
+const submitBtn = document.getElementById("submitBtn");
+const form = document.getElementById("wasteForm");
+
+let stream;
+
+// Upload File
+uploadBtn.onclick = () => fileInput.click();
+fileInput.onchange = () => {
+  previewImage.src = URL.createObjectURL(fileInput.files[0]);
+  previewImage.style.display = "block";
+  video.style.display = "none";
+  captureBtn.style.display = "none";
+  submitBtn.disabled = false;
+};
+
+// Open Camera
+cameraBtn.onclick = async () => {
+  previewImage.style.display = "none";
+  video.style.display = "block";
+  submitBtn.disabled = true;
+  captureBtn.style.display = "block";
+
+  stream = await navigator.mediaDevices.getUserMedia({ video: { width: 1280, height: 720 } });
+  video.srcObject = stream;
+};
+
+// Capture Photo
+captureBtn.onclick = (e) => {
+  e.preventDefault();
+  const canvas = document.createElement("canvas");
+  canvas.width = video.videoWidth;
+  canvas.height = video.videoHeight;
+  canvas.getContext("2d").drawImage(video, 0, 0);
+
+  canvas.toBlob(blob => {
+    const file = new File([blob], "captured.jpg", { type: "image/jpeg" });
+    const dt = new DataTransfer();
+    dt.items.add(file);
+    fileInput.files = dt.files;
+
+    previewImage.src = URL.createObjectURL(file);
+    previewImage.style.display = "block";
+    video.style.display = "none";
+
+    stream.getTracks().forEach(t => t.stop());
+    captureBtn.style.display = "none";
+    submitBtn.disabled = false;
+  });
+};
+
+// FIXED: Capture Location Before Submitting
+form.addEventListener("submit", function(event) {
+  if (navigator.geolocation) {
+    event.preventDefault(); // stop immediate submit
+
+    navigator.geolocation.getCurrentPosition(
+      function(pos) {
+        document.getElementById("lat").value = pos.coords.latitude;
+        document.getElementById("lon").value = pos.coords.longitude;
+        console.log("✅ Location captured:", pos.coords.latitude, pos.coords.longitude);
+        form.submit(); // submit AFTER location is set
+      },
+      function() {
+        console.log("⚠️ Location denied — submitting without location");
+        form.submit(); // fallback submit
+      }
+    );
+  }
+});
+</script>
+
+</body>
+</html>

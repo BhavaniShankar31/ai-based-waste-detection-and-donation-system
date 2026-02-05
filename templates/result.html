@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+  <style>
+    .result-title {
+      font-size: 2rem;
+      font-weight: 700;
+      color: #1d7a41;
+      margin-bottom: 20px;
+    }
+    .item-text, .category-text, .action-text {
+      font-size: 1.2rem;
+      font-weight: 600;
+      color: #333;
+      margin-top: 10px;
+    }
+    .value-box {
+      background: #e9f9ed;
+      padding: 12px 18px;
+      border-radius: 10px;
+      font-size: 1.15rem;
+      font-weight: 500;
+      margin-top: 5px;
+      display: inline-block;
+      color: #1a5f36;
+    }
+    .action-box {
+      background: #fff9e8;
+      padding: 18px;
+      border-radius: 12px;
+      border-left: 5px solid #f2bb39;
+      margin-top: 15px;
+      font-size: 1.15rem;
+      line-height: 1.5em;
+      color: #4a4a4a;
+    }
+  </style>
+</head>
+<body>
+
+<div class="container" style="max-width:700px; margin-top:40px;">
+  <h2 class="result-title">Classification Result</h2>
+
+  <img src="{{ image_path }}" style="max-width:75%; border-radius:12px; margin-bottom:20px;">
+
+  <div class="item-text">Detected Item:</div>
+  <div class="value-box">{{ item }}</div>
+
+  <div class="category-text">Category:</div>
+  <div class="value-box">{{ category }}</div>
+
+  <div class="action-text">What to do:</div>
+  <div class="action-box">{{ action }}</div>
+
+  {% if show_donations and donation_places %}
+  <h3 style="margin-top:25px;">Nearby Donation Centers:</h3>
+  <ul style="list-style:none; padding:0;">
+    {% for p in donation_places %}
+    <li style="background:#e9f9ed; padding:12px; border-radius:10px; margin:10px;">
+      <strong>{{ p.name }}</strong><br>
+      {{ p.address }}<br>
+      <a href="https://www.google.com/maps/search/{{ p.name }} {{ p.address }}" target="_blank">📍 Open in Maps</a>
+    </li>
+    {% endfor %}
+  </ul>
+  {% endif %}
+
+  <a href="/" class="analyze-btn">⬅ Classify Another</a>
+  <a href="/history" class="secondary-btn" style="margin-top:10px;">📜 View History</a>
+
+</div>
+
+</body>
+</html>

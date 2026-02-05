@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html>
+<head>
+ <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+
+<div class="container" style="max-width:750px; margin-top:30px;">
+  <h2>History</h2>
+
+  {% if history %}
+    {% for entry in history %}
+      <div style="background:#e9f9ed; padding:15px; border-radius:12px; margin-bottom:12px;">
+        <img src="/{{ entry.image }}" style="width:120px; border-radius:10px;">
+        <p><strong>{{ entry.action }}</strong></p>
+        <p style="color:#555;">{{ entry.time }}</p>
+      </div>
+    {% endfor %}
+  {% else %}
+    <p>No history yet.</p>
+  {% endif %}
+
+  <a href="/" class="analyze-btn">⬅ Back</a>
+
+</div>
+
+</body>
+</html>

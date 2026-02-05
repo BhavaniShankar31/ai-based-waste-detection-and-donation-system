@@ -1,0 +1,99 @@
+body {
+  font-family: "Poppins", sans-serif;
+  background: linear-gradient(135deg, #d4f8d8, #b3f0c9);
+  margin: 0;
+  text-align: center;
+}
+
+header {
+  padding: 25px 0 10px;
+}
+
+header h1 {
+  color: #1d7a41;
+  margin: 0;
+  font-size: 2.3rem;
+}
+
+header p {
+  color: #3e6d4d;
+  margin-top: 5px;
+}
+
+.container {
+  background: white;
+  width: 85%;
+  max-width: 650px;
+  margin: 25px auto;
+  padding: 25px;
+  border-radius: 18px;
+  box-shadow: 0 8px 25px rgba(0,0,0,0.08);
+}
+
+#preview-box {
+  border: 2px dashed #69c587;
+  border-radius: 14px;
+  height: 260px;
+  background: #ebffee;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 20px;
+  overflow: hidden;
+}
+
+video, img {
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: contain;
+  border-radius: 14px;
+}
+
+/* Buttons */
+.button-row {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 12px;
+}
+
+.primary-btn, .secondary-btn, .analyze-btn {
+  width: 48%;
+  padding: 12px;
+  border-radius: 10px;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: 0.3s;
+  border: none;
+}
+
+.primary-btn {
+  background: #1d7a41;
+  color: white;
+}
+
+.secondary-btn {
+  background: white;
+  border: 2px solid #1d7a41;
+  color: #1d7a41;
+}
+
+.analyze-btn {
+  width: 100%;
+  background: #1d7a41;
+  color: white;
+  margin-top: 10px;
+}
+
+#captureBtn {
+  width: 100%;
+  background: #1d7a41;
+  padding: 12px;
+  border-radius: 10px;
+  color: white;
+  margin-bottom: 10px;
+  cursor: pointer;
+}
+
+button:hover {
+  opacity: 0.9;
+}
